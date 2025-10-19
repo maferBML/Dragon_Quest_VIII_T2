@@ -6,62 +6,7 @@ public abstract class Personaje {
     private int defensa;
     private int velocidad;
     private boolean vive;
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setVidaHp(int vidaHp) {
-        this.vidaHp = vidaHp;
-    }
-
-    public void setMagiaMp(int magiaMp) {
-        this.magiaMp = magiaMp;
-    }
-
-    public void setAtaque(int ataque) {
-        this.ataque = ataque;
-    }
-
-    public void setDefensa(int defensa) {
-        this.defensa = defensa;
-    }
-
-    public void setVelocidad(int velocidad) {
-        this.velocidad = velocidad;
-    }
-
-    public void setVive(boolean vive) {
-        this.vive = vive;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public int getVidaHp() {
-        return vidaHp;
-    }
-
-    public int getMagiaMp() {
-        return magiaMp;
-    }
-
-    public int getAtaque() {
-        return ataque;
-    }
-
-    public int getDefensa() {
-        return defensa;
-    }
-
-    public int getVelocidad() {
-        return velocidad;
-    }
-
-    public boolean isVive() {
-        return vive;
-    }
+    private Estado estado;
 
     public Personaje(String nombre, int vidaHp, int magiaMp, int ataque, int defensa, int velocidad) {
         this.nombre = nombre;
@@ -71,6 +16,7 @@ public abstract class Personaje {
         this.defensa = defensa;
         this.velocidad = velocidad;
         this.vive = true;
+        this.estado = null;
     }
 
     public abstract void atacar(Personaje enemigo);
@@ -101,7 +47,73 @@ public abstract class Personaje {
         System.out.println("Ataque: " + this.ataque);
         System.out.println("Defensa: " + this.defensa);
         System.out.println("Velocidad: " + this.velocidad);
-        System.out.println("Estado: " + (this.vive ? "Vivo" : "Derrotado"));
+        System.out.println("Estado: " + (this.vive ? "Vivo" : "Derrotado") +
+            (estado != null ? " [" + estado.getNombre() + " " + estado.getDuracion() + "]" : ""));
+    }
+
+    // Getters y setters
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getVidaHp() {
+        return vidaHp;
+    }
+
+    public int getMagiaMp() {
+        return magiaMp;
+    }
+
+    public int getAtaque() {
+        return ataque;
+    }
+
+    public int getDefensa() {
+        return defensa;
+    }
+
+    public int getVelocidad() {
+        return velocidad;
+    }
+
+    public boolean isVive() {
+        return vive;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    // 🔹 Setters
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setVidaHp(int vidaHp) {
+        this.vidaHp = vidaHp;
+    }
+
+    public void setMagiaMp(int magiaMp) {
+        this.magiaMp = magiaMp;
+    }
+
+    public void setAtaque(int ataque) {
+        this.ataque = ataque;
+    }
+
+    public void setDefensa(int defensa) {
+        this.defensa = defensa;
+    }
+
+    public void setVelocidad(int velocidad) {
+        this.velocidad = velocidad;
+    }
+
+    public void setVive(boolean vive) {
+        this.vive = vive;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 }
-

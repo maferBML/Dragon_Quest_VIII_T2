@@ -11,11 +11,12 @@ public class Enemigo extends Personaje {
 
     @Override
     public void atacar(Personaje enemigo) {
-        int danio = this.getAtaque() - enemigo.getDefensa();
-        if (danio < 0) {
-            danio = 0;
+        if (getEstado() != null && getEstado().getNombre().equals("Paralizado")) {
+            System.out.println(getNombre() + " está paralizado y no puede atacar.");
+            return;
         }
-
+        int danio = this.getAtaque() - enemigo.getDefensa();
+        if (danio < 0) danio = 0;
         enemigo.setVidaHp(enemigo.getVidaHp() - danio);
         if (enemigo.getVidaHp() <= 0) {
             enemigo.setVive(false);
@@ -28,7 +29,10 @@ public class Enemigo extends Personaje {
 
     public void accionAutomatica(Personaje enemigo) {
         int decision = random.nextInt(100);
-
+        if (getEstado() != null && getEstado().getNombre().equals("Paralizado")) {
+            System.out.println(getNombre() + " está paralizado y no puede actuar.");
+            return;
+        }
         if (tipo.equalsIgnoreCase("agresivo")) {
             atacar(enemigo);
         } else if (tipo.equalsIgnoreCase("defensivo") && decision < 30) {
@@ -44,10 +48,8 @@ public class Enemigo extends Personaje {
     }
 
     public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+         return tipo; 
+        }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 }
+
