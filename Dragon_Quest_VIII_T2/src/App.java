@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 public class App {
     public static void main(String[] args) {
         Heroe heroe1 = new Heroe("Héroe", 100, 30, 25, 10, 15);
@@ -19,19 +21,39 @@ public class App {
         heroes.add(heroe3);
         heroes.add(heroe4);
 
-        // Crear enemigos
-        Enemigo enemigo1 = new Enemigo("Goblin", 70, 0, 20, 8, 10, "agresivo");
-        Enemigo enemigo2 = new Enemigo("Slime", 60, 0, 15, 5, 8, "agresivo");
-        Enemigo enemigo3 = new Enemigo("Dragón", 110, 20, 30, 15, 14, "defensivo");
-        Enemigo enemigo4 = new Enemigo("Esqueleto", 80, 0, 18, 9, 13, "agresivo");
+        //enemigos
+        Enemigo[] enemigosArr = {
+            new Enemigo("Goblin", 70, 0, 20, 8, 10, "agresivo"),
+            new Enemigo("Slime", 60, 0, 15, 5, 8, "agresivo"),
+            new Enemigo("Dragón", 110, 20, 30, 15, 14, "defensivo"),
+            new Enemigo("Esqueleto", 80, 0, 18, 9, 13, "agresivo")
+        };
 
-        ArrayList<Enemigo> enemigos = new ArrayList<>();
-        enemigos.add(enemigo1);
-        enemigos.add(enemigo2);
-        enemigos.add(enemigo3);
-        enemigos.add(enemigo4);
+        Random random = new Random();
+        int indiceMiniJefe = random.nextInt(enemigosArr.length);
 
-        // Iniciar combate
+        Enemigo elegido = enemigosArr[indiceMiniJefe];
+        enemigosArr[indiceMiniJefe] = new Enemigo(
+            elegido.getNombre(), 
+            elegido.getVidaHp(),
+            elegido.getMagiaMp(), 
+            elegido.getAtaque(), 
+            elegido.getDefensa(),
+            elegido.getVelocidad(), 
+            elegido.getTipo(), 
+            true 
+        );
+
+        System.out.println("\n⚔️  ¡Un " + enemigosArr[indiceMiniJefe].getNombre().toUpperCase() + 
+                           " ha aparecido como JEFE (Cagaste)!");
+        System.out.println("HP aumentado: " + enemigosArr[indiceMiniJefe].getVidaHp());
+        System.out.println("Ataque aumentado: " + enemigosArr[indiceMiniJefe].getAtaque());
+        System.out.println("Defensa aumentada: " + enemigosArr[indiceMiniJefe].getDefensa());
+        System.out.println("==============================================\n");
+
+        ArrayList<Enemigo> enemigos = new ArrayList<>(Arrays.asList(enemigosArr));
+
+        // pa iniciar
         Combate combate = new Combate(heroes, enemigos);
         combate.iniciar();
     }

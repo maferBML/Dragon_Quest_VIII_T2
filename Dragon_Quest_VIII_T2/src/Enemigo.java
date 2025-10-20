@@ -51,5 +51,23 @@ public class Enemigo extends Personaje {
          return tipo; 
         }
     public void setTipo(String tipo) { this.tipo = tipo; }
+
+    private boolean miniJefe;
+
+    public Enemigo(String nombre, int vidaHp, int magiaMp, int ataque, int defensa, int velocidad, String tipo, boolean miniJefe) {
+        super(nombre, vidaHp, magiaMp, ataque, defensa, velocidad);
+        this.tipo = tipo;
+        this.miniJefe = miniJefe;
+        if (miniJefe) {
+            setVidaHp(getVidaHp() + 50);
+            setAtaque(getAtaque() + 15);
+            setDefensa(getDefensa() + 10);
+        }
+    }
+
+    public boolean esMiniJefe() {
+        return miniJefe;
+}
+
 }
 
