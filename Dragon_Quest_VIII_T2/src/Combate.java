@@ -30,10 +30,27 @@ public class Combate {
 
                 // Aplicar efectos de estado al inicio del turno
                 if (p.getEstado() != null) {
-                    p.getEstado().aplicarEfecto(p);
-                    if (p.getEstado().terminado()) {
-                        System.out.println(p.getNombre() + " ya no está " + p.getEstado().getNombre() + ".");
-                        p.setEstado(null);
+                    if (p.getEstado().getNombre().equals("Sueño")) {
+                        // 50% de probabilidad de despertar
+                        boolean despierta = random.nextBoolean();
+                        if (despierta) {
+                            System.out.println(p.getNombre() + " se ha despertado del sueño.");
+                            p.setEstado(null);
+                        } else {
+                            System.out.println(p.getNombre() + " sigue dormido y pierde el turno.");
+                            p.getEstado().reducirDuracion();
+                            if (p.getEstado().terminado()) {
+                                System.out.println(p.getNombre() + " ya no está " + p.getEstado().getNombre() + ".");
+                                p.setEstado(null);
+                            }
+                            continue; // pierde la acción este turno
+                        }
+                    } else {
+                        p.getEstado().aplicarEfecto(p);
+                        if (p.getEstado() != null && p.getEstado().terminado()) {
+                            System.out.println(p.getNombre() + " ya no está " + p.getEstado().getNombre() + ".");
+                            p.setEstado(null);
+                        }
                     }
                 }
 

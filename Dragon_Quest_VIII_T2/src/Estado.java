@@ -12,7 +12,6 @@ public class Estado {
     public void reducirDuracion() { if (duracion > 0) duracion--; }
     public boolean terminado() { return duracion <= 0; }
 
-    // Lógica simple de efecto
     public void aplicarEfecto(Personaje p) {
         if (nombre.equals("Envenenado")) {
             System.out.println(p.getNombre() + " sufre daño por veneno.");
@@ -22,7 +21,11 @@ public class Estado {
                 p.setVive(false);
                 System.out.println(p.getNombre() + " ha muerto por veneno.");
             }
+            reducirDuracion();
         }
-        reducirDuracion();
+
+        else if (nombre.equals("Sueño")) {
+            reducirDuracion(); 
+        }
     }
 }
