@@ -44,7 +44,7 @@ public class App {
             true 
         );
 
-        System.out.println("\n⚔️  ¡Un " + enemigosArr[indiceMiniJefe].getNombre().toUpperCase() + 
+        System.out.println("\n¡Un " + enemigosArr[indiceMiniJefe].getNombre().toUpperCase() + 
                            " ha aparecido como JEFE (Cagaste)!");
         System.out.println("HP aumentado: " + enemigosArr[indiceMiniJefe].getVidaHp());
         System.out.println("Ataque aumentado: " + enemigosArr[indiceMiniJefe].getAtaque());
