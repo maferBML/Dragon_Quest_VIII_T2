@@ -75,11 +75,8 @@ public class Combate {
                             if (objetivo != null) heroe.atacar(objetivo);
                         }
                         case 2 -> heroe.defender();
-                        case 3 -> {
-                            Enemigo objetivo = elegirEnemigo();
-                            if (objetivo != null)
-                                heroe.usarHabilidad(objetivo, (ArrayList<Heroe>) heroes);
-                        }
+                        case 3 -> heroe.usarHabilidad((ArrayList<Heroe>) heroes, enemigos);
+
                         default -> System.out.println("Opción inválida. Pierdes el turno por bobito");
                     }
 

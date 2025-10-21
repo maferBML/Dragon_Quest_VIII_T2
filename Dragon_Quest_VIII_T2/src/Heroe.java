@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Heroe extends Personaje {
 
@@ -44,7 +46,7 @@ public class Heroe extends Personaje {
     }
 
     // versión mejorada para elegir a quién curar o atacar
-    public void usarHabilidad(Personaje enemigo, ArrayList<Heroe> heroes) {
+    public void usarHabilidad(ArrayList<Heroe> heroes, List<Enemigo> enemigos) {
         if (habilidades.isEmpty()) {
             System.out.println(getNombre() + " no tiene habilidades.");
             return;
@@ -77,14 +79,22 @@ public class Heroe extends Personaje {
         System.out.println(getNombre() + " usa " + h.getNombre() + "!");
 
         switch (h.getTipo().toLowerCase()) {
-            case "daño":
+            case "daño" -> {
+                Enemigo enemigo = elegirEnemigo(enemigos);
+                if (enemigo == null) return;
                 enemigo.setVidaHp(enemigo.getVidaHp() - h.getPoder());
-                System.out.println(enemigo.getNombre() + " recibe " + h.getPoder() + " puntos de daño mágico :O.");
+                System.out.println(enemigo.getNombre() + " recibe " + h.getPoder() + " puntos de daño mágico.");
                 if (enemigo.getVidaHp() <= 0) enemigo.setVive(false);
-                break;
+            }
 
-            case "curación":
-                // 💚 Elegir compañero a curar
+            case "estado" -> {
+                Enemigo enemigo = elegirEnemigo(enemigos);
+                if (enemigo == null) return;
+                enemigo.setEstado(new Estado(h.getEstado(), h.getDuracion()));
+                System.out.println(enemigo.getNombre() + " ahora está " + h.getEstado() + ".");
+            }
+
+            case "curación" -> {
                 System.out.println("\n¿A qué compañero quieres curar?");
                 for (int i = 0; i < heroes.size(); i++) {
                     Heroe aliado = heroes.get(i);
@@ -96,23 +106,41 @@ public class Heroe extends Personaje {
                 int eleccion = sc.nextInt();
 
                 if (eleccion < 1 || eleccion > heroes.size() || !heroes.get(eleccion - 1).estaVivo()) {
-                    System.out.println("Y esa opcion de donde salio?.");
+                    System.out.println("Y esa opción de dónde salió? Pierdes el turno por inventarte cosas.");
                     return;
                 }
 
                 Heroe aliadoCurado = heroes.get(eleccion - 1);
                 aliadoCurado.setVidaHp(aliadoCurado.getVidaHp() + h.getPoder());
                 System.out.println(aliadoCurado.getNombre() + " recupera " + h.getPoder() + " puntos de vida.");
-                break;
+            }
 
-            case "estado":
-                enemigo.setEstado(new Estado(h.getEstado(), h.getDuracion()));
-                System.out.println(enemigo.getNombre() + " ahora está " + h.getEstado() + ".");
-                break;
-
-            default:
-                System.out.println("Que es esa habilidad? para proximas actualizaciones te la ponemos.");
-                break;
+            default -> System.out.println("¿Qué es esa habilidad? Para próximas actualizaciones te la ponemos.");
         }
+    }
+
+    // elegir enemigo desde aqui
+    private Enemigo elegirEnemigo(List<Enemigo> enemigos) {
+        Scanner sc = new Scanner(System.in);
+        List<Enemigo> vivos = new ArrayList<>();
+        for (Enemigo e : enemigos) if (e.estaVivo()) vivos.add(e);
+
+        if (vivos.isEmpty()) return null;
+
+        System.out.println("\nElige un enemigo:");
+        for (int i = 0; i < vivos.size(); i++) {
+            Enemigo e = vivos.get(i);
+            System.out.println((i + 1) + ". " + e.getNombre() + " (HP: " + e.getVidaHp() + ")");
+        }
+
+        System.out.print("Número del enemigo: ");
+        int eleccion = sc.nextInt();
+
+        if (eleccion < 1 || eleccion > vivos.size()) {
+            System.out.println("Opción inválida, se elige uno al azar.");
+            return vivos.get(new Random().nextInt(vivos.size()));
+        }
+
+        return vivos.get(eleccion - 1);
     }
 }
