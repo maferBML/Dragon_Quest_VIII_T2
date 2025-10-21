@@ -64,14 +64,14 @@ public class Heroe extends Personaje {
         int opcion = sc.nextInt();
 
         if (opcion < 1 || opcion > habilidades.size()) {
-            System.out.println("Te inventaste esa opcion.");
+            System.out.println("\nTe inventaste esa opcion.");
             return;
         }
 
         Habilidad h = habilidades.get(opcion - 1);
 
         if (getMagiaMp() < h.getCosteMp()) {
-            System.out.println("No tienes suficiente MP para usar " + h.getNombre() + ".");
+            System.out.println("\nNo tienes suficiente MP para usar " + h.getNombre() + ".");
             return;
         }
 
@@ -106,7 +106,7 @@ public class Heroe extends Personaje {
                 int eleccion = sc.nextInt();
 
                 if (eleccion < 1 || eleccion > heroes.size() || !heroes.get(eleccion - 1).estaVivo()) {
-                    System.out.println("Y esa opción de dónde salió? Pierdes el turno por inventarte cosas.");
+                    System.out.println("\nY esa opción de dónde salió? Pierdes el turno por inventarte cosas.");
                     return;
                 }
 
@@ -115,7 +115,7 @@ public class Heroe extends Personaje {
                 System.out.println(aliadoCurado.getNombre() + " recupera " + h.getPoder() + " puntos de vida.");
             }
 
-            default -> System.out.println("¿Qué es esa habilidad? Para próximas actualizaciones te la ponemos.");
+            default -> System.out.println("\n¿Qué es esa habilidad? Para próximas actualizaciones te la ponemos.");
         }
     }
 

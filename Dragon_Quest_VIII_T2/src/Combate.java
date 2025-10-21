@@ -11,13 +11,20 @@ public class Combate {
     }
 
     public void iniciar() {
-        System.out.println("\n=== ¡Comienza el combate, FIGHT! ===\n");
+        System.out.println("=== ¡Comienza el combate, FIGHT! ===\n");
         int turno = 1;
         Scanner sc = new Scanner(System.in);
 
         while (hayVivos(heroes) && hayVivos(enemigos)) {
             System.out.println("---- Turno " + turno + " ----");
             mostrarEstado();
+
+            System.out.print("\n¿Vas a continuar? (s/n): ");
+            String seguir = sc.next().toLowerCase();
+            if (seguir.equals("n")) {
+                System.out.println("\n¡COBARDE! ¡lOS ENEMIGOS GANARON!");
+            return;
+        }
 
             List<Personaje> participantes = new ArrayList<>();
             participantes.addAll(heroes);
@@ -63,22 +70,36 @@ public class Combate {
                     System.out.println("\n==============================");
                     System.out.println("     Turno de " + heroe.getNombre());
                     System.out.println("==============================");
-                    System.out.println("1. Atacar");
-                    System.out.println("2. Defender");
-                    System.out.println("3. Usar Habilidad");
-                    System.out.print("Elige una acción (1,2,3): ");
-                    int opcion = sc.nextInt();
+                    boolean accionRealizada = false;
 
-                    switch (opcion) {
-                        case 1 -> {
-                            Enemigo objetivo = elegirEnemigo();
-                            if (objetivo != null) heroe.atacar(objetivo);
-                        }
-                        case 2 -> heroe.defender();
-                        case 3 -> heroe.usarHabilidad((ArrayList<Heroe>) heroes, enemigos);
+while (!accionRealizada) {
+    System.out.println("1. Atacar");
+    System.out.println("2. Defender");
+    System.out.println("3. Usar Habilidad");
+    System.out.print("Elige una acción (1,2,3): ");
+    int opcion = sc.nextInt();
 
-                        default -> System.out.println("Opción inválida. Pierdes el turno por bobito");
-                    }
+    switch (opcion) {
+        case 1 -> {
+            Enemigo objetivo = elegirEnemigo();
+            if (objetivo != null) heroe.atacar(objetivo);
+            accionRealizada = true;
+        }
+        case 2 -> {
+            heroe.defender();
+            accionRealizada = true;
+        }
+        case 3 -> {
+            int mpAntes = heroe.getMagiaMp();
+            heroe.usarHabilidad((ArrayList<Heroe>) heroes, enemigos);
+
+            if (heroe.getMagiaMp() != mpAntes) accionRealizada = true;
+            else System.out.println("\nElige otra acción: ");
+        }
+        default -> System.out.println("\nQue fue eso?\n");
+    }
+}
+
 
                 } 
                 // Turno de los enemigos
@@ -140,7 +161,7 @@ public class Combate {
         int eleccion = sc.nextInt();
 
         if (eleccion < 1 || eleccion > vivos.size()) {
-            System.out.println("Opción inválida, se elige un enemigo al azar.");
+            System.out.println("\nOpción inválida, se elige un enemigo al azar.");
             return vivos.get(random.nextInt(vivos.size()));
         }
         return vivos.get(eleccion - 1);
