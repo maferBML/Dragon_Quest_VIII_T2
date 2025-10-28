@@ -13,7 +13,7 @@ public class App {
         heroe3.agregarHabilidad(new Habilidad("Veneno", "estado", 0, 6, 2, "Envenenado"));
 
         heroe4.agregarHabilidad(new Habilidad("Rayo Divino", "daño", 35, 12));
-        heroe4.agregarHabilidad(new Habilidad("Curación Menor", "curación", 20, 6));
+        heroe4.agregarHabilidad(new Habilidad("Curación Menor", "curación", 240, 6));
 
         ArrayList<Heroe> heroes = new ArrayList<>();
         heroes.add(heroe1);
@@ -44,7 +44,7 @@ public class App {
             true 
         );
 
-        System.out.println("\n¡Un " + enemigosArr[indiceMiniJefe].getNombre().toUpperCase() + 
+        System.out.println("\n⚔️  ¡Un " + enemigosArr[indiceMiniJefe].getNombre().toUpperCase() + 
                            " ha aparecido como JEFE (Cagaste)!");
         System.out.println("HP aumentado: " + enemigosArr[indiceMiniJefe].getVidaHp());
         System.out.println("Ataque aumentado: " + enemigosArr[indiceMiniJefe].getAtaque());
