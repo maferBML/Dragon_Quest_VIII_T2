@@ -39,7 +39,8 @@ public class Combate {
                 // Aplicar efectos de estado
                 if (p.getEstado() != null) {
                     if (p.getEstado().getNombre().equals("Sueño")) {
-                        boolean despierta = random.nextBoolean();
+                        System.out.println(p.getNombre() + " está dormido (" + p.getEstado().getDuracion() + " turnos restantes).");
+                        boolean despierta = random.nextInt(100) < 33;
                         if (despierta) {
                             System.out.println(p.getNombre() + " se desperto! :O");
                             p.setEstado(null);
