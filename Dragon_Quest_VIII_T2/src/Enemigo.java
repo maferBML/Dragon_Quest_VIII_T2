@@ -44,7 +44,7 @@ public class Enemigo extends Personaje {
             if (random.nextInt(100) < 70) {
                 int duracionSueño = random.nextInt(3) + 1; // 1-3 turnos
                 enemigo.setEstado(new Estado("Sueño", duracionSueño));
-                System.out.println("💤 " + enemigo.getNombre() + " ha caído dormido por " + duracionSueño + " turnos!");
+                System.out.println(enemigo.getNombre() + " ha caído dormido por " + duracionSueño + " turnos!");
             }
         }
 
