@@ -1,3 +1,4 @@
+package modelo;
 public class Estado {
     private String nombre;
     private int duracion;

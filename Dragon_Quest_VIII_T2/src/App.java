@@ -1,6 +1,12 @@
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+
+import modelo.Combate;
+import modelo.Enemigo;
+import modelo.Habilidad;
+import modelo.Heroe;
 public class App {
     public static void main(String[] args) {
         Heroe heroe1 = new Heroe("Héroe", 100, 30, 25, 10, 15);
@@ -20,7 +26,7 @@ public class App {
         heroes.add(heroe2);
         heroes.add(heroe3);
         heroes.add(heroe4);
-
+        
         //enemigos
         Enemigo[] enemigosArr = {
             new Enemigo("Goblin", 70, 0, 20, 8, 10, "agresivo"),
