@@ -55,3 +55,4 @@ public class VentanaInicio extends JFrame {
         new VentanaInicio();
     }
 }
+

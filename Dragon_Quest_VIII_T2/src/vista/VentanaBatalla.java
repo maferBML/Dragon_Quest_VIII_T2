@@ -3,17 +3,18 @@ package vista;
 import modelo.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.*;
+import java.awt.event.ActionEvent;
 
 public class VentanaBatalla extends JFrame {
-
     private Image fondo;
     private JTextArea cuadroTexto;
     private JPanel panelHeroes, panelEnemigos, panelAcciones;
     private ArrayList<Heroe> heroes;
     private ArrayList<Enemigo> enemigos;
     private Enemigo miniJefe;
+    private CombateGUI combate;
+    private ArrayList<JLabel> labelsHeroes = new ArrayList<>();
 
     public VentanaBatalla() {
         setTitle("⚔️ Batalla en el Reino de Trodain");
@@ -22,13 +23,9 @@ public class VentanaBatalla extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Fondo
         fondo = new ImageIcon(getClass().getResource("/foticos/bosque.jpg")).getImage();
-
-        // === Crear los personajes reales ===
         inicializarPersonajes();
 
-        // === Crear la interfaz ===
         JPanel panelFondo = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -39,36 +36,32 @@ public class VentanaBatalla extends JFrame {
         panelFondo.setLayout(new BorderLayout());
         panelFondo.setBorder(BorderFactory.createLineBorder(Color.WHITE, 6));
 
-        // Héroes (arriba)
         panelHeroes = new JPanel(new GridLayout(1, heroes.size(), 10, 10));
         panelHeroes.setOpaque(false);
         panelHeroes.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         for (Heroe h : heroes) agregarHeroe(h);
 
-        // Enemigos (centro)
         panelEnemigos = new JPanel(new GridLayout(1, enemigos.size(), 15, 15));
         panelEnemigos.setOpaque(false);
         panelEnemigos.setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50));
         for (Enemigo e : enemigos) agregarEnemigo(e);
 
-        // Cuadro de texto (abajo)
-        cuadroTexto = new JTextArea(4, 20);
+        cuadroTexto = new JTextArea(8, 20);
         cuadroTexto.setEditable(false);
         cuadroTexto.setWrapStyleWord(true);
         cuadroTexto.setLineWrap(true);
-        cuadroTexto.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        cuadroTexto.setFont(new Font("Monospaced", Font.PLAIN, 14));
         cuadroTexto.setBackground(new Color(20, 20, 50));
         cuadroTexto.setForeground(Color.WHITE);
         cuadroTexto.setText(mensajeJefe());
 
-        // Botones (solo continuar/salir al principio)
         panelAcciones = new JPanel();
         panelAcciones.setBackground(new Color(10, 10, 30));
         JButton btnContinuar = crearBoton("Continuar");
         JButton btnSalir = crearBoton("Salir");
 
-        btnContinuar.addActionListener((ActionEvent e) -> mostrarBotonesBatalla());
-        btnSalir.addActionListener((ActionEvent e) -> System.exit(0));
+        btnContinuar.addActionListener(e -> mostrarBotonesBatalla());
+        btnSalir.addActionListener(e -> System.exit(0));
 
         panelAcciones.add(btnContinuar);
         panelAcciones.add(btnSalir);
@@ -79,7 +72,6 @@ public class VentanaBatalla extends JFrame {
         panelInferior.add(new JScrollPane(cuadroTexto), BorderLayout.CENTER);
         panelInferior.add(panelAcciones, BorderLayout.SOUTH);
 
-        // Estructura general
         panelFondo.add(panelHeroes, BorderLayout.NORTH);
         panelFondo.add(panelEnemigos, BorderLayout.CENTER);
         panelFondo.add(panelInferior, BorderLayout.SOUTH);
@@ -88,10 +80,7 @@ public class VentanaBatalla extends JFrame {
         setVisible(true);
     }
 
-    // ===================== MÉTODOS AUXILIARES =====================
-
     private void inicializarPersonajes() {
-        // --- HEROES ---
         Heroe heroe1 = new Heroe("Héroe", 100, 30, 25, 10, 15);
         Heroe heroe2 = new Heroe("Yangus", 120, 20, 27, 12, 12);
         Heroe heroe3 = new Heroe("Jessica", 90, 50, 20, 8, 18);
@@ -106,7 +95,6 @@ public class VentanaBatalla extends JFrame {
 
         heroes = new ArrayList<>(Arrays.asList(heroe1, heroe2, heroe3, heroe4));
 
-        // --- ENEMIGOS ---
         Enemigo[] enemigosArr = {
             new Enemigo("Goblin", 70, 0, 20, 8, 10, "agresivo"),
             new Enemigo("Slime", 60, 0, 15, 5, 8, "agresivo"),
@@ -142,15 +130,39 @@ public class VentanaBatalla extends JFrame {
         lbl.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         lbl.setOpaque(false);
         panelHeroes.add(lbl);
+        labelsHeroes.add(lbl);
     }
 
     private void agregarEnemigo(Enemigo e) {
+        JPanel panelE = new JPanel(new BorderLayout());
+        panelE.setOpaque(false);
+
         JLabel lbl = new JLabel("<html><center>" + e.getNombre() + "</center></html>", JLabel.CENTER);
         lbl.setForeground(e.esMiniJefe() ? Color.ORANGE : Color.RED);
         lbl.setFont(new Font("Serif", Font.BOLD, 16));
         lbl.setBorder(BorderFactory.createLineBorder(e.esMiniJefe() ? Color.ORANGE : Color.RED, 2));
         lbl.setOpaque(false);
-        panelEnemigos.add(lbl);
+        panelE.add(lbl, BorderLayout.CENTER);
+
+        JButton btn = crearBoton("Atacar");
+        
+        btn.addActionListener(ev -> {
+            if (combate != null) {
+                cuadroTexto.setText(combate.atacarEnemigo(e));
+                actualizarLabelsHeroes();
+            }
+        });
+        panelE.add(btn, BorderLayout.SOUTH);
+
+        panelEnemigos.add(panelE);
+    }
+
+    private void actualizarLabelsHeroes() {
+        for (int i = 0; i < heroes.size(); i++) {
+            Heroe h = heroes.get(i);
+            JLabel lbl = labelsHeroes.get(i);
+            lbl.setText("<html><center><b>" + h.getNombre() + "</b><br>HP: " + h.getVidaHp() + "<br>MP: " + h.getMagiaMp() + "</center></html>");
+        }
     }
 
     private JButton crearBoton(String texto) {
@@ -167,24 +179,34 @@ public class VentanaBatalla extends JFrame {
         return "💀 ¡Un " + miniJefe.getNombre().toUpperCase() + " ha aparecido como JEFE!\n" +
                "HP aumentado: " + miniJefe.getVidaHp() + "\n" +
                "Ataque aumentado: " + miniJefe.getAtaque() + "\n" +
-               "Defensa aumentada: " + miniJefe.getDefensa() + "\n\n" +
-               "¿Deseas continuar o salir?";
+               "Defensa aumentada: " + miniJefe.getDefensa() + "\n";
     }
 
-    // Cuando se presiona “Continuar”
     private void mostrarBotonesBatalla() {
+        combate = new CombateGUI(heroes, enemigos);
+        cuadroTexto.setText(combate.getLog());
+
         panelAcciones.removeAll();
-        JButton btnAtacar = crearBoton("⚔️ Atacar");
-        JButton btnDefender = crearBoton("🛡️ Defender");
-        JButton btnHabilidad = crearBoton("✨ Habilidad");
-        JButton btnContinuar = crearBoton("Continuar");
+
+        JButton btnAtacar = crearBoton("Atacar");
+        JButton btnHabilidad = crearBoton("Habilidad");
+        JButton btnSalir = crearBoton("Salir");
+
+        btnAtacar.addActionListener(e -> {
+            cuadroTexto.setText(combate.getLog()); // recordatorio
+        });
+
+        btnHabilidad.addActionListener(e -> {
+            cuadroTexto.setText( combate.usarHabilidadHeroe() );
+            actualizarLabelsHeroes();
+        });
+
+        btnSalir.addActionListener(e -> System.exit(0));
 
         panelAcciones.add(btnAtacar);
-        panelAcciones.add(btnDefender);
         panelAcciones.add(btnHabilidad);
-        panelAcciones.add(btnContinuar);
+        panelAcciones.add(btnSalir);
 
-        cuadroTexto.setText("🔥 ¡Comienza el combate! Elige una acción...");
         panelAcciones.revalidate();
         panelAcciones.repaint();
     }
