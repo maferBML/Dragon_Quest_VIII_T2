@@ -2,11 +2,11 @@ package vista;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class VentanaInicio extends JFrame {
 
     private Image imagenFondo;
-    private JLabel titulo;
 
     public VentanaInicio() {
     
@@ -18,33 +18,41 @@ public class VentanaInicio extends JFrame {
 
         imagenFondo = new ImageIcon(getClass().getResource("/foticos/bosque.jpg")).getImage();
 
-        JPanel panelFondo = new JPanel() {
+        JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
-                // 🖋️ Dibujar borde blanco grueso
-                g.setColor(Color.WHITE);
-                ((Graphics2D) g).setStroke(new BasicStroke(5));
-                g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
             }
         };
-        panelFondo.setLayout(new BorderLayout());
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 6));
 
-        // 🌟 Título
-        titulo = new JLabel("⚔️ REINO DE TRODAIN ⚔️", SwingConstants.CENTER);
-        titulo.setFont(new Font("Serif", Font.BOLD, 36));
+        JLabel titulo = new JLabel("DRAGON QUEST VIII: El Despertar de Trodain", JLabel.CENTER);
+        titulo.setFont(new Font("Serif", Font.BOLD, 28));
         titulo.setForeground(Color.WHITE);
-        titulo.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+        titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        panelFondo.add(titulo, BorderLayout.NORTH);
+        JButton btnIniciar = new JButton("⚔️ Iniciar Batalla");
+        btnIniciar.setFont(new Font("Serif", Font.BOLD, 24));
+        btnIniciar.setBackground(new Color(30, 144, 225));
+        btnIniciar.setForeground(Color.WHITE);
+        btnIniciar.setFocusPainted(false);
+        btnIniciar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
 
-        add(panelFondo);
+        btnIniciar.addActionListener((ActionEvent e) -> {
+            dispose();
+            new VentanaBatalla();
+        });
+
+        panel.add(titulo, BorderLayout.NORTH);
+        panel.add(btnIniciar, BorderLayout.CENTER);
+        add(panel);
+        setVisible(true);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new VentanaInicio().setVisible(true);
-        });
+        new VentanaInicio();
     }
 }
+

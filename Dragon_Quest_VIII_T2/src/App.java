@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -26,7 +25,7 @@ public class App {
         heroes.add(heroe2);
         heroes.add(heroe3);
         heroes.add(heroe4);
-        
+
         //enemigos
         Enemigo[] enemigosArr = {
             new Enemigo("Goblin", 70, 0, 20, 8, 10, "agresivo"),
@@ -64,3 +63,4 @@ public class App {
         combate.iniciar();
     }
 }
+

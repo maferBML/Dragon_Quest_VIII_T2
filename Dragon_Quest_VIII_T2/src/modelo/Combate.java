@@ -175,4 +175,33 @@ while (!accionRealizada) {
         for (Heroe h : heroes) if (h.estaVivo()) vivos.add(h);
         return vivos.isEmpty() ? null : vivos.get(random.nextInt(vivos.size()));
     }
+
+    // 🔹 Versión para GUI (captura texto en lugar de imprimir en consola)
+public String iniciarDesdeGUI() {
+    StringBuilder resultado = new StringBuilder();
+    resultado.append("💥 ¡Comienza la batalla épica! 💥\n\n");
+    int turno = 1;
+
+    while (hayVivos(heroes) && hayVivos(enemigos) && turno <= 1) { 
+        // Solo muestra un turno al iniciar
+        resultado.append("---- Turno ").append(turno).append(" ----\n");
+        for (Heroe h : heroes) {
+            resultado.append(h.getNombre())
+                     .append(" - HP: ").append(h.getVidaHp())
+                     .append(" | MP: ").append(h.getMagiaMp()).append("\n");
+        }
+        resultado.append("\n");
+
+        for (Enemigo e : enemigos) {
+            resultado.append(e.getNombre())
+                     .append(" - HP: ").append(e.getVidaHp()).append("\n");
+        }
+
+        resultado.append("\nSelecciona una acción para comenzar...");
+        break; // Solo muestra el estado inicial
+    }
+
+    return resultado.toString();
+}
+
 }
